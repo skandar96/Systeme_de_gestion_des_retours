@@ -1,5 +1,7 @@
 package com.example.project.Model;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -35,4 +37,7 @@ public class Produit {
     @Min(0)
     @Column(nullable = false)
     private Integer quantite;
+    
+    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    private List<RetourProduit> retours;
 }

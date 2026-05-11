@@ -1,49 +1,77 @@
 package com.example.project.Controller;
 
-import com.example.project.Dto.ProduitRequest;
-import com.example.project.Dto.ProduitResponse;
+import com.example.project.Dto.ProduitDto;
+import com.example.project.Mapper.ProduitMapper;
+import com.example.project.Model.Produit;
 import com.example.project.Service.ProduitService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/produits")
 public class ProduitController {
 
-    private final ProduitService produitService;
-
-    public ProduitController(ProduitService produitService) {
-        this.produitService = produitService;
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ProduitResponse create(@Valid @RequestBody ProduitRequest request) {
+    @Autowired
+    private ProduitService produitService;
+    @Autowired
+    private ProduitMapper produitMapper;
+    
+    @GetMapping("/all")
+    public ResponseEntity<List<ProduitDto>> gettallprod(){
+    	List<Produit> produits = produitService.getAllProduits();
+		List<ProduitDto> produitsDto = produitMapper.toDtos(produits);
+		return ResponseEntity.ok(produitsDto);
     	
-        return produitService.create(request);
+    	
+    }
+    
+    
+    
+   
+    @GetMapping("/get/{id}")
+    
+    
+    
+    public ResponseEntity<ProduitDto> getProduitById(@PathVariable Long id) {
+        Produit p =produitService.getProduitById(id);
+        if (p == null) {
+			
+			return ResponseEntity.status(404).body(null);
+		}
+        ProduitDto pDto = produitMapper.toDto(p);
+        		return ResponseEntity.ok(pDto);
     }
 
-    @GetMapping("/{id}")
-    public ProduitResponse getById(@PathVariable Long id) {
-        return produitService.getById(id);
-    }
+    @PostMapping("/add")
+    public ResponseEntity<Produit> addProduit(@Valid @RequestBody ProduitDto produitDto) {
+		Produit p = produitMapper.FromDto(produitDto);
+		Produit newProduit = produitService.ajouterProduit(p);
+		return ResponseEntity.ok(newProduit);
+	}
+    
+    @DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> deleteProduit(@PathVariable Long id) {
+    	produitService.supprimerProduit(id);
+		return 	ResponseEntity.ok("Suppression avec succès");
+	}
 
-    @GetMapping
-    public List<ProduitResponse> getAll() {
-        return produitService.getAll();
-    }
-
-    @PutMapping("/{id}")
-    public ProduitResponse update(@PathVariable Long id, @Valid @RequestBody ProduitRequest request) {
-        return produitService.update(id, request);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        produitService.delete(id);
-    }
+	@PutMapping("/update/{id}")
+	public ResponseEntity<String> updateProduit(@PathVariable Long id, @Valid @RequestBody ProduitDto produitDto) {
+		Produit p = produitMapper.FromDto(produitDto);
+		 produitService.mettreAJourProduit(id, p);
+		return ResponseEntity.ok("Mise à jour avec succès");
+	}
+	@GetMapping("/search")
+	public ResponseEntity<List<ProduitDto>> searchProduits(@RequestParam String nom) {
+		List<Produit> produits = produitService.findByNom(nom);
+		List<ProduitDto> produitsDto = produitMapper.toDtos(produits);
+		return ResponseEntity.ok(produitsDto);
+	}
+    
+   
 }
