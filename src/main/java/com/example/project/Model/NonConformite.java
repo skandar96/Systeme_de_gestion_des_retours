@@ -3,7 +3,12 @@ package com.example.project.Model;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class NonConformite {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
