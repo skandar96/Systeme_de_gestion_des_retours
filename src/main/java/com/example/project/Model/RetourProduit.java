@@ -35,6 +35,9 @@ public class RetourProduit {
     @Column(nullable = false)
     private LocalDateTime date;
     
+    @Column(nullable = false)
+    private Long quantite;
+
     @OneToMany(mappedBy = "retourProduit")
     private List<NonConformite> nonConformite;
 

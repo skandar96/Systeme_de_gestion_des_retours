@@ -38,10 +38,10 @@ public class NonConformiteController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<NonConformiteDto> add(@Valid @RequestBody NonConformiteDto dto) {
+    public ResponseEntity<String> add(@Valid @RequestBody NonConformiteDto dto) {
         NonConformite nc = nonConformiteMapper.fromDto(dto);
-        NonConformite saved = nonConformiteService.ajouterNonConformite(nc);
-        return ResponseEntity.ok(nonConformiteMapper.toDto(saved));
+        
+        return nonConformiteService.ajouterNonConformite(nc);
     }
 
     @DeleteMapping("/delete/{id}")

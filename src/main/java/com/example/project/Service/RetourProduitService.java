@@ -76,6 +76,8 @@ public class RetourProduitService {
                     existing.setRaison(r.getRaison());
                     existing.setEtatTraitement(r.getEtatTraitement());
                     existing.setDate(r.getDate());
+                    existing.setQuantite(r.getQuantite());
+                    
 
                     // if produit provided, validate and set
                     if (r.getProduit() != null) {

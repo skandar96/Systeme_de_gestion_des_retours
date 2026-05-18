@@ -5,6 +5,10 @@ import com.example.project.Model.Role;
 import com.example.project.Model.Utilisateur;
 import com.example.project.Repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,4 +38,30 @@ public class UserService {
      return utilisateurRepository.findByEmail(email)
              .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
  }
+ 
+ public Utilisateur findById(Long id) {
+	 return utilisateurRepository.findById(id)
+			 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+ }
+ public List<Utilisateur> Getall() {
+	 return utilisateurRepository.findAll();
+ }
+ public ResponseEntity<String> deleteById(Long id) {
+	 if (!utilisateurRepository.existsById(id)) {
+		 return ResponseEntity.notFound().build();
+	 }
+	 utilisateurRepository.deleteById(id);
+	 return ResponseEntity.ok("Utilisateur supprimé avec succès");
+ }
+ public Utilisateur updateUser(Long id, RegisterRequest request) {
+	 Utilisateur u = utilisateurRepository.findById(id).
+			 orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+	 u.setNom(request.getNom());
+	 u.setEmail(request.getEmail());
+	 if (request.getRole() != null) {
+		 u.setRole(request.getRole());
+	 }
+	 return utilisateurRepository.save(u);
+ }
+ 
 }

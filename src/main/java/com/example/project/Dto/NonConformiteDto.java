@@ -12,4 +12,6 @@ public class NonConformiteDto {
     private Gravite gravite;
     private LocalDate date;
     private Long retourProduitId;
+    private String adminName;
+    private Long adminId;
 }

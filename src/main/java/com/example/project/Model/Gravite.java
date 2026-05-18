@@ -5,6 +5,6 @@ public enum Gravite {
     MOYENNE,
     ELEVEE,
     CRITIQUE
-	
+	 
 
 }

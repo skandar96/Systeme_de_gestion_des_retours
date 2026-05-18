@@ -28,7 +28,7 @@ public class NonConformiteService {
         return nonConformiteRepository.findById(id).orElse(null);
     }
 
-    public NonConformite ajouterNonConformite(NonConformite nc) {
+    public ResponseEntity<String> ajouterNonConformite(NonConformite nc) {
         if (nc.getRetourProduit() == null || nc.getRetourProduit().getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "RetourProduit id is required");
         }
@@ -37,7 +37,8 @@ public class NonConformiteService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RetourProduit not found"));
 
         nc.setRetourProduit(retour);
-        return nonConformiteRepository.save(nc);
+        nonConformiteRepository.save(nc);
+        return ResponseEntity.ok("NonConformite ajouté avec succès");
     }
 
     public ResponseEntity<String> supprimerNonConformite(Long id) {

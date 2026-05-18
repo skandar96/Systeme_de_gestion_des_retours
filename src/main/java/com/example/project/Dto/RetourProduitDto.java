@@ -9,9 +9,12 @@ import java.util.List;
 public class RetourProduitDto {
     private Long id;
     private Long produitId;
+    private String produitNom;
+    private String clientname;
     private Long clientId;
     private String raison;
     private String etatTraitement;
     private LocalDateTime date;
-    private List<Long> nonConformiteIds;
+    private Long quantite;
+    
 }

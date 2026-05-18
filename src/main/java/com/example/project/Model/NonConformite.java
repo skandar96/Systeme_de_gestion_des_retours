@@ -7,7 +7,7 @@ import lombok.*;
 
 @Entity
 @Data
-@NoArgsConstructor
+@NoArgsConstructor 
 @AllArgsConstructor
 public class NonConformite {
 	@Id
@@ -17,9 +17,12 @@ public class NonConformite {
 	
 	@Enumerated(EnumType.STRING)
 	private Gravite gravite;
-	
+	 
 	private LocalDate date;
 	
+	@ManyToOne
+	@JoinColumn(name = "admin_id", nullable = false)
+	private Utilisateur admin;
 	
 	@ManyToOne
 	@JoinColumn(name = "retour_produit_id")

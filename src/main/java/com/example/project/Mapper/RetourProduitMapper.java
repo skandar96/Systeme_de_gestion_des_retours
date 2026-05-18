@@ -19,41 +19,27 @@ public class RetourProduitMapper {
     private ModelMapper mmMapper;
 
     public RetourProduitDto toDto(RetourProduit r) {
-        if (r == null) return null;
-        RetourProduitDto dto = new RetourProduitDto();
-        dto.setId(r.getId());
-        dto.setProduitId(r.getProduit() != null ? r.getProduit().getId() : null);
-        dto.setClientId(r.getClient() != null ? r.getClient().getId() : null);
-        dto.setRaison(r.getRaison());
-        dto.setEtatTraitement(r.getEtatTraitement());
-        dto.setDate(r.getDate());
-        if (r.getNonConformite() != null) {
-            List<Long> ncIds = r.getNonConformite().stream()
-                    .map(NonConformite::getId)
-                    .collect(Collectors.toList());
-            dto.setNonConformiteIds(ncIds);
-        }
+        RetourProduitDto dto = mmMapper.map(r, RetourProduitDto.class);
+        dto.setProduitId(r.getProduit().getId());
+        dto.setClientId(r.getClient().getId());
+        dto.setClientname(r.getClient().getNom());
+        dto.setProduitNom(r.getProduit().getNom());
+        dto.setQuantite(r.getQuantite());
         return dto;
     }
 
     public RetourProduit fromDto(RetourProduitDto dto) {
-        if (dto == null) return null;
-        RetourProduit r = new RetourProduit();
-        r.setId(dto.getId());
-        if (dto.getProduitId() != null) {
-            Produit p = new Produit();
-            p.setId(dto.getProduitId());
-            r.setProduit(p);
-        }
-        if (dto.getClientId() != null) {
-            Utilisateur u = new Utilisateur();
-            u.setId(dto.getClientId());
-            r.setClient(u);
-        }
-        r.setRaison(dto.getRaison());
-        r.setEtatTraitement(dto.getEtatTraitement());
-        r.setDate(dto.getDate());
-        // nonConformite list mapping left null; typically handled elsewhere
+        RetourProduit r = mmMapper.map(dto, RetourProduit.class);
+        
+        
+        Produit p = new Produit();
+        p.setId(dto.getProduitId());
+        r.setProduit(p);
+        Utilisateur client = new Utilisateur();
+        client.setId(dto.getClientId());
+        client.setNom(dto.getClientname());
+        r.setClient(client);
+        
         return r;
     }
 
